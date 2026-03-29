@@ -20,7 +20,7 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Generate calendars for next 5 years
+      - name: Generate calendars for next 2 years
         run: |
           CURRENT_YEAR=$(date +%Y)
           for i in 0 1; do
