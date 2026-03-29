@@ -74,10 +74,12 @@ func generateGarbageCalendars(year int) error {
 
 		jalali := jalalical.NewJalaliCal(tehranDay)
 		const title = "Garbage collection"
-		if jalali.Day()%2 == 1 {
-			oddIcal.AddTimedEvent(startTime, endTime, title)
-		} else {
-			evenIcal.AddTimedEvent(startTime, endTime, title)
+		if jalali.Day() != 31 {
+			if jalali.Day()%2 == 1 {
+				oddIcal.AddTimedEvent(startTime, endTime, title)
+			} else {
+				evenIcal.AddTimedEvent(startTime, endTime, title)
+			}
 		}
 
 		day = currday.Add(24 * time.Hour)
