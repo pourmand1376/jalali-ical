@@ -32,6 +32,18 @@ func (i *ical) AddEvent(day time.Time, title string) {
 	event.SetSummary(title)
 }
 
+func (i *ical) AddTimedEvent(start time.Time, end time.Time, title string) {
+	hash := md5.Sum([]byte(fmt.Sprintf("%s%s", title, start.UTC().Format(time.RFC3339))))
+	id := hex.EncodeToString(hash[:])
+	event := i.cal.AddEvent(fmt.Sprintf("%s@%s",
+		"github.com/raaminz/jalali-ical/1", id))
+	event.SetCreatedTime(start.UTC())
+	event.SetDtStampTime(start.UTC())
+	event.SetStartAt(start)
+	event.SetEndAt(end)
+	event.SetSummary(title)
+}
+
 func (i *ical) Serialize() string {
 	return i.cal.Serialize()
 }

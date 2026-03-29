@@ -32,6 +32,22 @@ END:VEVENT
 END:VCALENDAR
 `
 
+const expectedTimed = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//arran4//Golang ICS Library
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:github.com/raaminz/jalali-ical/1@062d64028e09bec23795074df7e13446
+CREATED:20250101T173000Z
+DTSTAMP:20250101T173000Z
+DTSTART:20250101T173000Z
+DTEND:20250101T174000Z
+SUMMARY:Garbage collection
+END:VEVENT
+END:VCALENDAR
+`
+
 func TestCreate(t *testing.T) {
 	today := time.Date(2022, 12, 25, 0, 0, 0, 0, time.UTC)
 	ical := ical.NewIcal()
@@ -41,5 +57,17 @@ func TestCreate(t *testing.T) {
 	got := ical.Serialize()
 	if strings.TrimSpace(got) != strings.TrimSpace(expected) {
 		t.Errorf("got %s want %s", got, expected)
+	}
+}
+
+func TestTimedEvent(t *testing.T) {
+	// 2025-01-01 21:00 Tehran (IRST = UTC+3:30) corresponds to 17:30 UTC
+	start := time.Date(2025, 1, 1, 17, 30, 0, 0, time.UTC)
+	end := start.Add(10 * time.Minute)
+	ic := ical.NewIcal()
+	ic.AddTimedEvent(start, end, "Garbage collection")
+	got := ic.Serialize()
+	if strings.TrimSpace(got) != strings.TrimSpace(expectedTimed) {
+		t.Errorf("got %s want %s", got, expectedTimed)
 	}
 }

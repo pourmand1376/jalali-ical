@@ -51,7 +51,57 @@ func Main(year int) error {
 	fileName := fmt.Sprintf("%d_(%d-%d)_persian_calendar.ics",
 		year, firstJalaliYear.Year(), secondJalaliYear.Year())
 
-	return writeToFile(fileName, iclContent)
+	if err := writeToFile(fileName, iclContent); err != nil {
+		return err
+	}
+
+	return generateGarbageCalendars(year)
+}
+
+func generateGarbageCalendars(year int) error {
+	firstDay := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	tehranLoc := jalalical.TehranLocation()
+
+	oddIcal := ical.NewIcal()
+	evenIcal := ical.NewIcal()
+
+	currday := &firstDay
+	for year == currday.Year() {
+		day := *currday
+		tehranDay := day.In(tehranLoc)
+		startTime := time.Date(tehranDay.Year(), tehranDay.Month(), tehranDay.Day(), 21, 0, 0, 0, tehranLoc)
+		endTime := startTime.Add(10 * time.Minute)
+
+		jalali := jalalical.NewJalaliCal(tehranDay)
+		const title = "Garbage collection"
+		if jalali.Day() != 31 {
+			if jalali.Day()%2 == 1 {
+				oddIcal.AddTimedEvent(startTime, endTime, title)
+			} else {
+				evenIcal.AddTimedEvent(startTime, endTime, title)
+			}
+		}
+
+		day = currday.Add(24 * time.Hour)
+		year = currday.Year()
+		currday = &day
+	}
+
+	firstJalaliYear := jalalical.NewJalaliCal(firstDay)
+	secondJalaliYear := jalalical.NewJalaliCal(*currday)
+
+	oddContent := oddIcal.Serialize()
+	evenContent := evenIcal.Serialize()
+
+	oddFileName := fmt.Sprintf("%d_(%d-%d)_garbage_odd_calendar.ics",
+		year, firstJalaliYear.Year(), secondJalaliYear.Year())
+	evenFileName := fmt.Sprintf("%d_(%d-%d)_garbage_even_calendar.ics",
+		year, firstJalaliYear.Year(), secondJalaliYear.Year())
+
+	if err := writeToFile(oddFileName, oddContent); err != nil {
+		return err
+	}
+	return writeToFile(evenFileName, evenContent)
 }
 
 func writeToFile(fileName string, data string) error {

@@ -25,4 +25,11 @@ func TestMain(t *testing.T) {
 			t.Errorf("got %d want %d", got, want)
 		}
 	})
+	t.Run("day", func(t *testing.T) {
+		got := j.Day()
+		const want = 11
+		if got != want {
+			t.Errorf("got %d want %d", got, want)
+		}
+	})
 }

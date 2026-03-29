@@ -28,3 +28,8 @@ func (j *jalaliCal) Year() int {
 	return j.pt.Year()
 
 }
+
+// Day returns the Jalali day of month
+func (j *jalaliCal) Day() int {
+	return j.pt.Day()
+}
