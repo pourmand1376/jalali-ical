@@ -1,0 +1,34 @@
+name: Release Calendars
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Generate calendars for next 5 years
+        run: |
+          CURRENT_YEAR=$(date +%Y)
+          for i in 0 1 2 3 4; do
+            YEAR=$((CURRENT_YEAR + i))
+            go run cmd/jalali-ical.go --year "$YEAR"
+          done
+
+      - name: Upload calendars to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.ics"
