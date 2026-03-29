@@ -32,5 +32,5 @@ git push origin v1.0.0
 ```
 
 The **Release Calendars** GitHub Actions workflow will automatically:
-1. Generate `.ics` files for the current year and the 4 following years.
+1. Generate `.ics` files for the current year and the following year.
 2. Upload all generated calendar files as assets to the corresponding GitHub Release.
