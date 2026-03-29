@@ -20,4 +20,4 @@ Running the command also generates two additional calendars for garbage collecti
 - **Odd-day**: events on days where the Jalali day-of-month is odd (1, 3, 5, …, 29)
 - **Even-day**: events on days where the Jalali day-of-month is even (2, 4, 6, …, 30)
 
-Each event is at **21:00 Tehran time** with a **10-minute** duration. Day 31 is excluded from both calendars because not all Jalali months have 31 days, making it an inconsistent collection day.
+Each event is at **21:00 Tehran time** with a **10-minute** duration. Day 31 is excluded from both calendars because garbage is not collected on that day in our town.
