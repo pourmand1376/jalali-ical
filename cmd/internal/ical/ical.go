@@ -42,6 +42,7 @@ func (i *ical) AddTimedEvent(start time.Time, end time.Time, title string) {
 	event.SetStartAt(start)
 	event.SetEndAt(end)
 	event.SetSummary(title)
+	event.SetTimeTransparency(ics.TransparencyTransparent)
 }
 
 func (i *ical) Serialize() string {

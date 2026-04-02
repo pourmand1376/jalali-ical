@@ -42,8 +42,9 @@ UID:github.com/raaminz/jalali-ical/1@a94a96048014b290ffa4db09134b98fc
 CREATED:20250101T183000Z
 DTSTAMP:20250101T183000Z
 DTSTART:20250101T183000Z
-DTEND:20250101T184000Z
+DTEND:20250101T190000Z
 SUMMARY:Garbage collection
+TRANSP:TRANSPARENT
 END:VEVENT
 END:VCALENDAR
 `
@@ -63,7 +64,7 @@ func TestCreate(t *testing.T) {
 func TestTimedEvent(t *testing.T) {
 	// 2025-01-01 22:00 Tehran (IRST = UTC+3:30) corresponds to 18:30 UTC
 	start := time.Date(2025, 1, 1, 18, 30, 0, 0, time.UTC)
-	end := start.Add(10 * time.Minute)
+	end := start.Add(30 * time.Minute)
 	ic := ical.NewIcal()
 	ic.AddTimedEvent(start, end, "Garbage collection")
 	got := ic.Serialize()

@@ -70,7 +70,7 @@ func generateGarbageCalendars(year int) error {
 		day := *currday
 		tehranDay := day.In(tehranLoc)
 		startTime := time.Date(tehranDay.Year(), tehranDay.Month(), tehranDay.Day(), 22, 0, 0, 0, tehranLoc)
-		endTime := startTime.Add(10 * time.Minute)
+		endTime := startTime.Add(30 * time.Minute)
 
 		jalali := jalalical.NewJalaliCal(tehranDay)
 		const title = "Garbage collection"
