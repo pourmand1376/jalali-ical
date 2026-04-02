@@ -34,7 +34,7 @@ Each event is at **22:00 Tehran time** with a **30-minute** duration. Day 31 is 
 
 ### Releasing calendars
 
-To publish calendars for the next 5 years, create and push a tag (any name):
+To publish calendars for the current year and the following year, create and push a tag (any name):
 
 ```bash
 git tag v1.0.0
