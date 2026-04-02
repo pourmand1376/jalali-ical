@@ -5,9 +5,20 @@ import (
 	"encoding/hex"
 	"fmt"
 	"time"
+	_ "time/tzdata"
 
 	ics "github.com/arran4/golang-ical"
 )
+
+const tehranTZ = "Asia/Tehran"
+
+func tehranLocation() *time.Location {
+	loc, err := time.LoadLocation(tehranTZ)
+	if err != nil {
+		panic(fmt.Sprintf("failed to load timezone %s: %v", tehranTZ, err))
+	}
+	return loc
+}
 
 type ical struct {
 	cal *ics.Calendar
@@ -37,11 +48,13 @@ func (i *ical) AddTimedEvent(start time.Time, end time.Time, title string) {
 	id := hex.EncodeToString(hash[:])
 	event := i.cal.AddEvent(fmt.Sprintf("%s@%s",
 		"github.com/raaminz/jalali-ical/1", id))
+	tehranLoc := tehranLocation()
 	event.SetCreatedTime(start.UTC())
 	event.SetDtStampTime(start.UTC())
-	event.SetStartAt(start)
-	event.SetEndAt(end)
+	event.SetProperty(ics.ComponentPropertyDtStart, start.In(tehranLoc).Format("20060102T150405"), ics.WithTZID(tehranTZ))
+	event.SetProperty(ics.ComponentPropertyDtEnd, end.In(tehranLoc).Format("20060102T150405"), ics.WithTZID(tehranTZ))
 	event.SetSummary(title)
+	event.SetTimeTransparency(ics.TransparencyTransparent)
 }
 
 func (i *ical) Serialize() string {
